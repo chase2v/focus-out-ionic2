@@ -1,2 +1,21 @@
 .timer {
+	canvas {
+		background-color: #ccc;
+
+		width: 300px;
+		height: 500px;
+	}
+	.play-button {
+		font-size: 50px;
+		height: 1.2em;
+		margin: 0;
+
+		position: absolute;
+		left: 150px;
+		top: 136px;
+		
+		ion-icon {
+			padding: 0;
+		}
+	}
 }
