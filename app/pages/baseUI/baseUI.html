@@ -1,0 +1,31 @@
+<ion-card class="root-card">
+	<ion-tabs>
+		<ion-tab [root]="tab1Root" tabIcon="timer"></ion-tab>
+		<ion-tab [root]="tab2Root" tabIcon="pulse"></ion-tab>
+		<ion-tab [root]="tab3Root" tabIcon="settings"></ion-tab>
+	</ion-tabs>
+</ion-card>
+<ion-row text-center class="root-playbar">
+	<ion-col>
+		<button light clear small (click)="isShowDetailCard()">
+			<ion-icon name="arrow-up"></ion-icon>
+		</button>
+	</ion-col>
+	<ion-col>
+		<button light clear small>
+			<ion-icon name="play"></ion-icon>
+		</button>
+	</ion-col>
+	<ion-col>
+		<button light clear small>
+			<ion-icon name="square"></ion-icon>
+		</button>
+	</ion-col>
+	<ion-col>
+		<button light clear small (click)="isShowAddTimerCard()">
+			<ion-icon name="add"></ion-icon>
+		</button>
+	</ion-col>
+</ion-row>
+<detail-card *ngIf="showDetailCard"></detail-card>
+<add-timer-card *ngIf="showAddTimerCard"></add-timer-card>
