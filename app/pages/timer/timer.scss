@@ -19,9 +19,10 @@
 		canvas {
 			width: 100%;
 		}
-
+		
+		// 设置 timer 中心播放按钮样式
 		.play-button {
-			font-size: 50px;
+			// font-size: 50px;
 			height: 1.2em;
 			margin: 0;
 
@@ -37,16 +38,32 @@
 		}
 	}
 
+	// 设置 timer 页底部的信息卡片样式
 	@at-root .info-card {
 		background-color: #000;
-		width: 200px;
+		width: 45%;
 
-		margin: 0 auto;
+		margin: 25px auto;
+
+		overflow: hidden;
 
 		font-weight: bold;
 		font-size: 30px;
 		color: #fff;
 		text-align: center;
+	}
+
+	@at-root .switch-button {
+		position: absolute;
+		top: 515px;
+
+		&.switch-button-back {
+			left: 0;
+		}
+
+		&.switch-button-forward {
+			right: 0;
+		}
 	}
 }
 

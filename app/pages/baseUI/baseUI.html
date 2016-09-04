@@ -1,6 +1,6 @@
 <ion-card class="root-card">
 	<ion-tabs>
-		<ion-tab [root]="tab1Root" tabIcon="timer"></ion-tab>
+		<ion-tab [root]="tab1Root" tabIcon="timer" (onPlay)="play($event)"></ion-tab>
 		<ion-tab [root]="tab2Root" tabIcon="pulse"></ion-tab>
 		<ion-tab [root]="tab3Root" tabIcon="settings"></ion-tab>
 	</ion-tabs>

@@ -41,7 +41,12 @@ export class BasePage {
   isShowDetailCard(): void {
     this.showDetailCard = !this.showDetailCard;
   }
+
   isShowAddTimerCard(): void {
     this.showAddTimerCard = !this.showAddTimerCard;
+  }
+
+  play(message: any): void {
+    console.log(message);
   }
 }

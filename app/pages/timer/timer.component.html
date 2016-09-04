@@ -8,7 +8,7 @@
 		25
 		<p>minutes</p>
 	</div>
-	<button #playbutton clear class="play-button">
-		<ion-icon name="play"></ion-icon>
+	<button #playbutton clear class="play-button" (click)="stateSwitch()">
+		<ion-icon name="{{playButtonIcon}}"></ion-icon>
 	</button>
 </div>

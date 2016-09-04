@@ -7,6 +7,8 @@
 </ion-header>
 
 <ion-content class="timer">
-	<timer-component></timer-component>
+	<timer-component (onPlay)="play($event)"></timer-component>
 	<info-card></info-card>
+	<button clear dark class="switch-button switch-button-back"><ion-icon name="arrow-back"></ion-icon></button>
+	<button clear dark class="switch-button switch-button-forward"><ion-icon name="arrow-forward"></ion-icon></button>
 </ion-content>
