@@ -4,31 +4,69 @@ import {
 	ViewChild,
 	EventEmitter
 } from '@angular/core';
+import {
+	StateService
+} from '../baseUI/state.service';
 
 @Component({
 	selector: 'timer-component',
 	templateUrl: 'build/pages/timer/timer.component.html'
 })
 export class TimerComponent {
+	constructor(private stateService: StateService) {
+		console.log('Run constructor!');
+
+		this.stateService.stateSwitched.subscribe(message => {
+			let msg = message.split(',');
+			if (msg[1] !== '0') {
+				if (msg[0] === 'stop') {
+					this.stop();
+				} else if (msg[0] === 'pause') {
+					this.pause();
+				} else if (msg[0] === 'play') {
+					this.play();
+				}
+			}
+		});
+	}
+
+	// 组件id
+	private id = 0;
+
 	// 用来获取 canvas 的 dom 节点
 	@ViewChild('canvas') canvas;
-	@ViewChild('textTimeLeft') textTimeLeft;
-	@ViewChild('textTimeRight') textTimeRight;
-	@ViewChild('playbutton') playButton;
+
+	@ViewChild('playbutton') playButton; // 获取按钮
+
+	@ViewChild('text') text;
 
 	// 播放的一些状态
 	private playType = 'work';
-	private playState = 'stop';
 	private playButtonIcon = 'play';
 
-	// 全局管理定时器
-	private interval = 0;
-	private i = 0;
-	private currentPos = 1.5 * Math.PI;
 
-	constructor() {
-		console.log('Run constructor!');
+	// timer 的设定
+	private timeSet = {
+		unit: 20,
+		workUnit: 'minutes', // or 'seconds'
+		breakUnit: 'minutes', // or 'seconds'
+		work: 2, // * 20 * 50 * 60
+		break: 1
 	}
+
+	private initTimeSet = {
+		unit: 20,
+		workUnit: 'minutes', // or 'seconds'
+		breakUnit: 'minutes', // or 'seconds'
+		work: 2, // * 20 * 50 * 60
+		break: 1
+	}
+
+	// 全局管理定时器
+	private interval = 0; // 定时器id
+	private i = 0; // 计数器
+	private currentPos = 1.5 * Math.PI; // timer 指针现在所处的位置
+	private time = this.timeSet.work * 50 * 60;
 
 	// 一些共用的绘制参数
 	private drawArgs = {
@@ -39,15 +77,15 @@ export class TimerComponent {
 
 	// 状态管理函数
 	stateSwitch(): void {
-		if (this.playState === 'stop') {
-			this.play('stop');
-			this.playState = 'play';
-		} else if (this.playState === 'pause') {
-			this.play('pause');
-			this.playState = 'play';
-		} else if (this.playState === 'play') {
+		if (this.stateService.timerState === 'stop') {
+			this.play();
+			this.stateService.switchState('play', this.id);
+		} else if (this.stateService.timerState === 'pause') {
+			this.play();
+			this.stateService.switchState('play', this.id);
+		} else if (this.stateService.timerState === 'play') {
 			this.pause();
-			this.playState = 'pause';
+			this.stateService.switchState('pause', this.id);
 		}
 	}
 
@@ -152,22 +190,37 @@ export class TimerComponent {
 		ctx.stroke();
 		// ************* 图形绘制结束 **************
 
-		// 绘制文字，文字宽度经测量约为90px
-		ctx.fillStyle = '#000';
-		ctx.font = bottomR + bottomH - 30 + 'px Arial';
-		ctx.fillText('Break Time', left[0] + (rect[0] - 270) / 2, leftBottom[1][1] - 25, 270);
-		ctx.fillText('Work Time', right[0] + (rect[0] - 260) / 2, rightBottom[1][1] - 25, 260);
-
 		// 动态处理文字样式，经测量文字的div高度为94
-		let textLeftStyle = this.textTimeLeft.nativeElement.style;
-		textLeftStyle.width = rect[0] / 3 + 'px';
-		textLeftStyle.left = left[0] / 3 + 'px';
-		textLeftStyle.top = (left[1] + radius[1]) / 3 + (leftBottom[0][1] / 3 - ((left[1] + radius[1]) / 3 + 94)) + 'px';
+		let textStyle = this.text.nativeElement.style,
+			text = this.text.nativeElement,
+			textLeft = text.querySelector('.timer-text-left'),
+			textRight = text.querySelector('.timer-text-right'),
+			time = text.querySelectorAll('.time'),
+			minutes = text.querySelectorAll('.minutes'),
+			type = text.querySelectorAll('.type');
+		textStyle.width = radius[1] * 2 / 3 + 'px';
+		textStyle.height = radius[1] * .8 / 3 + 'px';
+		textStyle.left = (screen.availWidth - radius[1] * 2 / 3) / 2 + 'px';
+		textStyle.top = (offsetHeight + radius[1] * 2) / 3 + 'px';
 
-		let textRightStyle = this.textTimeRight.nativeElement.style;
-		textRightStyle.width = rect[0] / 3 + 'px';
-		textRightStyle.left = right[0] / 3 + 'px';
-		textRightStyle.top = (left[1] + radius[1]) / 3 + (leftBottom[0][1] / 3 - ((left[1] + radius[1]) / 3 + 94)) + 'px';
+		textLeft.style.width = (parseFloat(textStyle.width) / 2 - 50 / 3) + 'px';
+		textRight.style.width = (parseFloat(textStyle.width) / 2 - 50 / 3) + 'px';
+
+		time.forEach(x=>{
+			let height = window.getComputedStyle(x).height;
+			x.style.lineHeight = height;
+			x.style.fontSize = parseFloat(height) * .75 + 'px';
+		});
+		minutes.forEach(x=>{
+			let height = window.getComputedStyle(x).height;
+			x.style.lineHeight = window.getComputedStyle(x).height;
+			x.style.fontSize = parseFloat(height) * .75 + 'px';
+		});
+		type.forEach(x=>{
+			let height = window.getComputedStyle(x).height;
+			x.style.lineHeight = window.getComputedStyle(x).height;
+			x.style.fontSize = parseFloat(height) * .75 + 'px';
+		});
 
 		// 动态处理播放按钮的top位置，大小
 		let playButtonStyle = this.playButton._elementRef.nativeElement.style;
@@ -178,12 +231,7 @@ export class TimerComponent {
 	/**
 	 * play 函数
 	 */
-	// 时间间隔的设置
-	private timeSet = {
-		workTime: 60,
-		breakTime: 30
-	}
-	play(lastState: string): void {
+	play(lastState?: string): void {
 		console.log('Run play!');
 
 		// 按钮状态切换
@@ -199,23 +247,26 @@ export class TimerComponent {
 		ctx.strokeStyle = '#000';
 
 		// 声明一些绘制需要的参数
-		let time;
-		if (this.playType === 'work') {
-			time = this.timeSet.workTime;
-		} else if (this.playType === 'break') {
-			time = this.timeSet.breakTime;
-		}
-
-		// 判断状态和类型进行参数的设定
-		// if (lastState === 'stop') {
-		// } else if (lastState === 'pause') {
-
-		// }
+		let time = this.time;
 
 		// 开始绘制
 		let inter = 2 / time * Math.PI,
 			nextPos = this.currentPos - inter;
 		this.interval = setInterval(() => {
+
+			// 随着时间变化，动态改变时间
+			let t_ = (time - this.i) % 50,
+				t = (time - this.i) / 50;
+			if(t_ === 0 && t <= 120) { // 定时器每运行50次，是一秒
+				console.log(t);
+				if(this.playType === 'work') {
+					this.timeSet.work = t;
+					this.timeSet.workUnit = 'seconds';
+				} else {
+					this.timeSet.break = t;
+					this.timeSet.breakUnit = 'seconds';
+				}
+			}
 
 			if (this.currentPos < inter) {
 				nextPos = 2 * Math.PI - (inter - this.currentPos);
@@ -238,19 +289,20 @@ export class TimerComponent {
 			ctx.stroke();
 			this.currentPos = nextPos;
 			this.i++;
-			console.log(this.i);
 
 			// 结束时需要做的事情
 			if (this.i === time) {
 				clearInterval(this.interval); // 清除定时器
-				this.playState = 'stop'; // 切换状态
+				this.stateService.switchState('stop', this.id); // 切换状态
 				this.playButtonIcon = 'play'; // 切换按钮状态
 				this.i = 0; // 计数清零
 				this.currentPos = 1.5 * Math.PI; // 恢复初始位置
+				this.timeSet = Object.assign({}, this.initTimeSet); // 恢复timeSet数据
 
 				// 重新绘制图形，恢复的初始状态
 				if (this.playType === 'work') {
 					this.playType = 'break';
+					this.time = this.timeSet.break;
 
 					ctx.fillStyle = '#0f0';
 					ctx.moveTo(center[0], center[1]);
@@ -267,6 +319,7 @@ export class TimerComponent {
 					ctx.stroke();
 				} else {
 					this.playType = 'work';
+					this.time = this.timeSet.work;
 
 					ctx.fillStyle = '#ff0';
 					ctx.moveTo(center[0], center[1]);
@@ -285,7 +338,7 @@ export class TimerComponent {
 
 				console.log('Play over!');
 			}
-		}, 1000);
+		}, this.timeSet.unit);
 	}
 
 	/**
@@ -296,5 +349,56 @@ export class TimerComponent {
 
 		clearInterval(this.interval); // 清除定时器
 		this.playButtonIcon = 'play'; // 切换按钮状态
+	}
+
+	stop(): void {
+		console.log('Run stop!');
+		clearInterval(this.interval); // 清除定时器
+		this.playButtonIcon = 'play'; // 恢复图标
+
+		// 重绘 timer
+		let ctx = this.canvas.nativeElement.getContext('2d');
+		let center = this.drawArgs.center, // 获取数据
+			r = this.drawArgs.r;
+
+		ctx.strokeStyle = '#000';
+		ctx.lineWitdh = 3;
+
+		// 设置interval运行次数，时间总长度 = 20 * this.i
+		this.i = 50;
+
+		// 绘制的参数
+		let inter = this.currentPos > 1.5 * Math.PI ? (2 * Math.PI - (this.currentPos - 1.5 * Math.PI)) / 50 : (1.5 * Math.PI - this.currentPos) / 50,
+			nextPos = this.currentPos + inter;
+
+		this.interval = setInterval(() => {
+			if (this.playType === 'work') {
+				ctx.fillStyle = '#ff0';
+			} else {
+				ctx.fillStyle = '#0f0';
+			}
+			ctx.moveTo(center[0], center[1]);
+			ctx.arc(center[0], center[1], r[1], this.currentPos, nextPos);
+			ctx.closePath();
+			ctx.fill();
+
+			// 绘制小圆，背景为白色
+			ctx.fillStyle = '#fff';
+			ctx.beginPath();
+			ctx.arc(center[0], center[1], r[0], 0, 2 * Math.PI);
+			ctx.fill();
+
+			ctx.stroke();
+			this.i--;
+			console.log(this.i);
+			if (this.i === 0) {
+				clearInterval(this.interval);
+			}
+			this.currentPos = nextPos;
+			nextPos += inter;
+			if (nextPos >= 2 * Math.PI) {
+				nextPos = nextPos - 2 * Math.PI;
+			}
+		}, 20);
 	}
 }

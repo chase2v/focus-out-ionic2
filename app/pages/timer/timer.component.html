@@ -1,12 +1,16 @@
 <div class="timer-component">
 	<canvas #canvas></canvas>
-	<div #textTimeLeft class="text-time">
-		5
-		<p>minutes</p>
-	</div>
-	<div #textTimeRight class="text-time">
-		25
-		<p>minutes</p>
+	<div #text class="timer-text">
+		<div class="timer-text-left">
+			<div class="time">{{timeSet.break}}</div>
+			<div class="minutes">{{timeSet.breakUnit}}</div>
+			<div class="type">Break</div>
+		</div>
+		<div class="timer-text-right">
+			<div class="time">{{timeSet.work}}</div>
+			<div class="minutes">{{timeSet.workUnit}}</div>
+			<div class="type">Work</div>
+		</div>
 	</div>
 	<button #playbutton clear class="play-button" (click)="stateSwitch()">
 		<ion-icon name="{{playButtonIcon}}"></ion-icon>

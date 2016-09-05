@@ -1,52 +1,71 @@
 import {
-  Component
+	Component,
+	ViewChild
 } from '@angular/core';
+
+// 导入自定义服务
 import {
-  TimerPage
+	StateService
+} from './state.service';
+
+// 导入三个页面
+import {
+	TimerPage
 } from '../timer/timer.page';
 import {
-  StatisticsPage
+	StatisticsPage
 } from '../statistics/statistics';
 import {
-  SettingPage
+	SettingPage
 } from '../setting/setting';
+
+// 导入直属组件
 import {
-  DetailCardComponent
+	DetailCardComponent
 } from './detailCard.component';
 import {
-  AddTimerCardComponent
+	AddTimerCardComponent
 } from './addTimerCard.component';
+import {
+	CtrlCenterComponent
+} from './ctrlCenter.component';
 
 @Component({
-  templateUrl: 'build/pages/baseUI/baseUI.html',
-  directives: [DetailCardComponent, AddTimerCardComponent]
+	templateUrl: 'build/pages/baseUI/baseUI.html',
+	directives: [DetailCardComponent, AddTimerCardComponent, CtrlCenterComponent],
+	providers: [StateService]
 })
 export class BasePage {
 
-  private tab1Root: any;
-  private tab2Root: any;
-  private tab3Root: any;
+	private tab1Root: any;
+	private tab2Root: any;
+	private tab3Root: any;
 
-  private showDetailCard = false;
-  private showAddTimerCard = false;
+	constructor(private stateService: StateService) {
+		// this tells the tabs component which Pages
+		// should be each tab's root Page
+		this.tab1Root = TimerPage;
+		this.tab2Root = StatisticsPage;
+		this.tab3Root = SettingPage;
+	}
 
-  constructor() {
-    // this tells the tabs component which Pages
-    // should be each tab's root Page
-    this.tab1Root = TimerPage;
-    this.tab2Root = StatisticsPage;
-    this.tab3Root = SettingPage;
-  }
+	// 用来控制卡片的显示和隐藏
+	private showDetailCard = false;
+	private showAddTimerCard = false;
 
-  isShowDetailCard(): void {
-    this.showDetailCard = !this.showDetailCard;
-  }
+	// 接收控制中心出来的信息，来控制卡片的展示和隐藏
+	isShowDetailCard(message: string): void {
+		console.log('Run isShowDetailCard!');
+		if (message === 'detail') {
+			this.showDetailCard = !this.showDetailCard;
+		}
+	}
 
-  isShowAddTimerCard(): void {
-    this.showAddTimerCard = !this.showAddTimerCard;
-  }
-
-  play(message: any): void {
-    console.log(message);
-  }
+	// 接收控制中心出来的信息，来控制卡片的展示和隐藏
+	isShowAddTimerCard(message: string): void {
+		console.log('Run isShowAddTimerCard!');
+		if (message === 'adder') {
+			this.showAddTimerCard = !this.showAddTimerCard;
+		}
+	}
 }

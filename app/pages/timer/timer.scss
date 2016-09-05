@@ -2,20 +2,43 @@
 	@at-root .timer-component {
 		text-align: center;
 		
-		@at-root .text-time {
+		// 处理 timer 中文字样式和位置
+		@at-root .timer-text {
 			position: absolute;
-			font-size: 50px;
+	
+			border: 1px solid #f00;
+	
 			color: #fff;
-			font-weight: bold;
-
-			p {
-				color: #fff;
-				font-weight: normal;
-				font-size: 25px;
-				line-height: 35px;
+	
+			.timer-text-left {
+				border: 1px solid #f00;
+				// width: 50%;
+				height: 100%;
+				float: left;
+			}
+			.timer-text-right {
+				overflow: hidden;
+				border: 1px solid #f00;
+				// width: 50%;
+				height: 100%;
+				float: right;
+			}
+			.time {
+				vertical-align: middle;
+				height: 50%;
+				// font-size: 56px;
+			}
+			.minutes {
+				height: 25%;
+				// font-size: 20px;
+			}
+			.type {
+				height: 25%;
+				color: #000;
+				// font-size: 20px;
 			}
 		}
-
+	
 		canvas {
 			width: 100%;
 		}
@@ -25,11 +48,11 @@
 			// font-size: 50px;
 			height: 1.2em;
 			margin: 0;
-
+	
 			position: absolute;
 			left: 50%;
 			transform: translateX(-50%);
-
+	
 			color: #000;
 			
 			ion-icon {
