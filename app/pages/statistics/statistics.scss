@@ -1,2 +1,30 @@
 .statistics {
+	@at-root .login-avatar {
+		padding: 35px 0;
+
+		ion-avatar img {
+			margin: 0 auto;
+		}
+	}
+
+	@at-root .ask-card {
+
+		border-radius: $global-radius;
+
+		.statement {
+			color: #000;
+			font-size: 20px;
+			font-weight: bold;
+			text-align: center;
+
+			margin: 0 auto 60px;
+		}
+
+		img {
+			width: 90px;
+			height: 90px;
+
+			margin: 80px auto 50px;
+		}
+	}
 }

@@ -1,0 +1,28 @@
+<ion-header>
+	<ion-navbar>
+		<button  clear small (click)="close()">
+			<ion-icon name="arrow-back" ></ion-icon>
+		</button>
+		<ion-title>登录</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<div class="login-avatar">
+		<ion-avatar>
+			<img src="img/avatar-gollum.jpg" />
+		</ion-avatar>
+	</div>
+	<ion-list>
+		<ion-item>
+			<ion-label floating>username</ion-label>
+			<ion-input></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label floating>password</ion-label>
+			<ion-input type="password"></ion-input>
+		</ion-item>
+	</ion-list>
+	<button block>登录</button>
+	<button block>还没有账户</button>
+</ion-content>

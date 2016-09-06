@@ -13,6 +13,8 @@
 
 @import "../pages/setting/setting";
 
+@import "../pages/baseUI/baseUI";
+
 .root-card {
 	width: 100%;
 	overflow: hidden;
@@ -37,25 +39,8 @@
 	height: 40px;
 }
 
-.timer-detail-card {
-	width: 100%;
-	height: 40%;
-	background-color: rgba(0, 0, 0, .95);
-
-	margin: 0;
-
-	border-radius: $global-radius;
-
-	position: absolute;
-	bottom: 38px;
-}
-
 .add-timer-card {
 	@extend .timer-detail-card;
-}
-
-ion-page {
-	background-color: #000;
 }
 
 ion-tabbar {

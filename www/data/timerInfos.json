@@ -1,0 +1,18 @@
+{
+	"data" : [
+		{
+			"name" : "study",
+			"id" : 1,
+			"type" : "default",
+			"target" : 5,
+			"theme" : "default",
+			"timeSet" : {
+				"unit" : 20,
+				"work" : 25,
+				"break" : 5,
+				"workUnit" : "minutes",
+				"breakUnit" : "minutes"
+			}
+		}
+	]
+}

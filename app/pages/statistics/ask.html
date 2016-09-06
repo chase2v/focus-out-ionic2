@@ -1,0 +1,17 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<ion-title>ask</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-card class="ask-card">
+		<img src="img/cloud.png" />
+		<div>
+			<p class="statement">开启云同步？</p>
+			<button dark block (click)="login()">登录</button>
+			<button dark block (click)="signUp()">注册</button>
+			<button dark clear block (click)="close()">不需要</button>
+		</div>
+	</ion-card>	
+</ion-content>

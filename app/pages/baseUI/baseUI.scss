@@ -1,0 +1,44 @@
+// timer详细信息卡片的样式
+.timer-detail-card {
+	width: 100%;
+	background-color: transparent;
+
+	margin: 0;
+
+	position: absolute;
+	bottom: 40px;
+
+	overflow: hidden;
+
+	ion-list {
+		margin: 0;
+	}
+	
+	ion-item {
+		background-color: rgba(0, 0, 0, .9);
+		color: #fff;
+		border-width: 0;
+
+		h2 {
+			color: #fff;
+		}
+
+		&:nth-child(1) {
+			border-top-left-radius: $global-radius;
+			border-top-right-radius: $global-radius;
+		}
+	}
+}
+
+// 去除input focus时的下底边
+@mixin rmbdColor {
+	border-bottom-width: 0 !important;
+	box-shadow: none;	
+} 
+
+.item-input.input-has-focus .item-inner {
+	@include rmbdColor;
+}
+ion-list .item-input.input-has-focus:last-child {
+	@include rmbdColor;
+}

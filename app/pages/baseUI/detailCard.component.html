@@ -1,1 +1,24 @@
-<ion-card class="timer-detail-card"></ion-card>
+<ion-card class="timer-detail-card">
+	<ion-list no-lines>
+		<ion-item>
+			<ion-label light fixed>name</ion-label> 
+			<ion-input text-right [(ngModel)]="timerInfo.name"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light fixed>work</ion-label> 
+			<ion-input text-right [(ngModel)]="timerInfo.timeSet.work"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light fixed>break</ion-label> 
+			<ion-input text-right [(ngModel)]="timerInfo.timeSet.break"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light fixed>target</ion-label> 
+			<ion-input text-right [(ngModel)]="timerInfo.target"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light fixed>theme</ion-label> 
+			<ion-input text-right [(ngModel)]="timerInfo.theme"></ion-input>
+		</ion-item>
+	</ion-list>
+</ion-card>

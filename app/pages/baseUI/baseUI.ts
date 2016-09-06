@@ -8,6 +8,8 @@ import {
 	StateService
 } from './state.service';
 
+// 导入数据
+
 // 导入三个页面
 import {
 	TimerPage
@@ -41,12 +43,18 @@ export class BasePage {
 	private tab2Root: any;
 	private tab3Root: any;
 
+	@ViewChild('mytab') mytabs;
+
 	constructor(private stateService: StateService) {
 		// this tells the tabs component which Pages
 		// should be each tab's root Page
 		this.tab1Root = TimerPage;
 		this.tab2Root = StatisticsPage;
 		this.tab3Root = SettingPage;
+	}
+
+	ionViewWillEnter() {
+		this.mytabs.select(1);
 	}
 
 	// 用来控制卡片的显示和隐藏
