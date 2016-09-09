@@ -13,7 +13,12 @@ import {
 } from './timer.component';
 import {
 	InfoCardComponent
-} from './infoCard.component'
+} from './infoCard.component';
+
+// 导入服务
+import {
+	TimerSwitcherService
+} from '../services/timerSwitcher.service';
 
 @Component({
 	templateUrl: 'build/pages/timer/timer.page.html',
@@ -27,7 +32,7 @@ export class TimerPage {
 	private stateIsDraw = false; // 判断 timer 是否已经绘制
 	private contentHeight: number; // 获取设备可用高度
 
-	constructor(private navCtrl: NavController) {
+	constructor(private navCtrl: NavController, private timerSwitcher: TimerSwitcherService) {
 		console.log('Run constructor!');
 	}
 
@@ -56,6 +61,12 @@ export class TimerPage {
 		console.log('传送onPlay！');
 
 		this.onPlay.emit(message);
+	}
+
+	// 左右按钮切换TImer
+	switchTimer(change: number): void {
+		console.log('Run switchTimer(TimerPage');
+		this.timerSwitcher.switchTimer(change);
 	}
 
 }

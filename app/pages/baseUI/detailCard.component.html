@@ -2,23 +2,23 @@
 	<ion-list no-lines>
 		<ion-item>
 			<ion-label light fixed>name</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.name"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.name" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>work</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.timeSet.work"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.timeSet.work" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>break</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.timeSet.break"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.timeSet.break" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>target</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.target"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.target" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>theme</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.theme"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.theme" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 	</ion-list>
 </ion-card>

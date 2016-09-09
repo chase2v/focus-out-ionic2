@@ -6,19 +6,15 @@
 		@at-root .timer-text {
 			position: absolute;
 	
-			border: 1px solid #f00;
-	
 			color: #fff;
 	
 			.timer-text-left {
-				border: 1px solid #f00;
 				// width: 50%;
 				height: 100%;
 				float: left;
 			}
 			.timer-text-right {
 				overflow: hidden;
-				border: 1px solid #f00;
 				// width: 50%;
 				height: 100%;
 				float: right;

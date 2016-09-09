@@ -13,6 +13,34 @@
 				"workUnit" : "minutes",
 				"breakUnit" : "minutes"
 			}
+		},
+		{
+			"name" : "read",
+			"id" : 2,
+			"type" : "default",
+			"target" : 2,
+			"theme" : "default",
+			"timeSet" : {
+				"unit" : 20,
+				"work" : 30,
+				"break" : 5,
+				"workUnit" : "minutes",
+				"breakUnit" : "minutes"
+			}
+		},
+		{
+			"name" : "sport",
+			"id" : 3,
+			"type" : "default",
+			"target" : 2,
+			"theme" : "default",
+			"timeSet" : {
+				"unit" : 20,
+				"work" : 20,
+				"break" : 10,
+				"workUnit" : "minutes",
+				"breakUnit" : "minutes"
+			}
 		}
 	]
 }

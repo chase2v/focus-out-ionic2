@@ -7,8 +7,13 @@ import {
 import {
 	StateService
 } from './state.service';
+import {
+	TimerSwitcherService
+} from '../services/timerSwitcher.service';
+import {
+	ShowCardService
+} from '../services/showCard.service';
 
-// 导入数据
 
 // 导入三个页面
 import {
@@ -35,7 +40,7 @@ import {
 @Component({
 	templateUrl: 'build/pages/baseUI/baseUI.html',
 	directives: [DetailCardComponent, AddTimerCardComponent, CtrlCenterComponent],
-	providers: [StateService]
+	providers: [StateService, TimerSwitcherService, ShowCardService]
 })
 export class BasePage {
 
@@ -44,28 +49,43 @@ export class BasePage {
 	private tab3Root: any;
 
 	@ViewChild('mytab') mytabs;
+	@ViewChild('detailCard') detailCard;
 
-	constructor(private stateService: StateService) {
+	constructor(private stateService: StateService, private timerSwitcherService: TimerSwitcherService, private showCardService: ShowCardService) {
 		// this tells the tabs component which Pages
 		// should be each tab's root Page
 		this.tab1Root = TimerPage;
 		this.tab2Root = StatisticsPage;
 		this.tab3Root = SettingPage;
+
+		this.showCardService.showCardObservable.subscribe(res => {
+			if (res === 'Show card!') {
+				this.isShowDetailCard('detail');
+			}
+		});
 	}
 
 	ionViewWillEnter() {
-		this.mytabs.select(1);
+		this.mytabs.select(2);
 	}
 
 	// 用来控制卡片的显示和隐藏
 	private showDetailCard = false;
 	private showAddTimerCard = false;
 
+	// 用来控制 1 控制按钮的图标
+	private detailCardIcon = 'arrow-up';
+
 	// 接收控制中心出来的信息，来控制卡片的展示和隐藏
 	isShowDetailCard(message: string): void {
 		console.log('Run isShowDetailCard!');
 		if (message === 'detail') {
 			this.showDetailCard = !this.showDetailCard;
+
+			this.detailCardIcon = this.showDetailCard ? 'arrow-down' : 'arrow-up';
+		}
+		if(!this.showDetailCard) {
+			this.detailCard.sendChange();
 		}
 	}
 

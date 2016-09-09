@@ -1,13 +1,9 @@
-<ion-card #myself class="info-card">
+<ion-card #myself class="info-card" (click)="showDetailCard()">
 	<ion-card-content>
-		<h2>Study</h2>
+		<h2>{{info.name}}</h2>
 		<p>today: 0</p>
 		<div>
-			<ion-icon name="star"></ion-icon>
-			<ion-icon name="star"></ion-icon>
-			<ion-icon name="star"></ion-icon>
-			<ion-icon name="star"></ion-icon>
-			<ion-icon name="star"></ion-icon>
+			<ion-icon name="star" *ngFor="let i of info.target"></ion-icon>
 		</div>
 	</ion-card-content>
 </ion-card>

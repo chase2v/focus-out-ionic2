@@ -14,24 +14,23 @@ import {
   BasePage
 } from './pages/baseUI/baseUI';
 
-// 导入服务
+// 导入数据服务
 import {
-  TimerInfoService
-} from './pages/services/timerInfo.service';
-import {
-  TimerSwitcherService
-} from './pages/services/timerSwitcher.service';
+  StoreService
+} from './pages/services/store.service';
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [TimerInfoService, TimerSwitcherService]
+  providers: [StoreService]
 })
 export class MyApp {
 
   private rootPage: any;
 
-  constructor(private platform: Platform, private timerInfoService: TimerInfoService, private timerSwitcherService: TimerSwitcherService) {
+  constructor(private platform: Platform, private store: StoreService) {
     this.rootPage = BasePage;
+
+    this.store.init();
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

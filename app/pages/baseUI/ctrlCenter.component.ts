@@ -1,7 +1,8 @@
 import {
 	Component,
 	Output,
-	EventEmitter
+	EventEmitter,
+	Input
 } from '@angular/core';
 
 // 导入自定义服务
@@ -36,6 +37,9 @@ export class CtrlCenterComponent {
 
 	// 用来切换按钮图标
 	private buttonIcon = 'play';
+
+	// 用来切换 1 按钮
+	@Input() detailCardIcon: string;
 
 	/**
 	 * 点击 1,4 按钮触发的动作，通过判断参数来确定传给父组件的信息

@@ -5,6 +5,6 @@
 		<ion-tab [root]="tab3Root" tabIcon="settings"></ion-tab>
 	</ion-tabs>
 </ion-card>
-<ctrl-center (showDetail)="isShowDetailCard($event)" (showAdder)="isShowAddTimerCard($event)"></ctrl-center>
-<detail-card *ngIf="showDetailCard"></detail-card>
+<ctrl-center (showDetail)="isShowDetailCard($event)" (showAdder)="isShowAddTimerCard($event)" [detailCardIcon]="detailCardIcon"></ctrl-center>
+<detail-card *ngIf="showDetailCard" #detailCard></detail-card>
 <add-timer-card *ngIf="showAddTimerCard"></add-timer-card>
