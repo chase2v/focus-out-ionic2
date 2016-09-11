@@ -1,0 +1,32 @@
+<ion-card padding class="statisticCard">
+	<ion-segment dark [(ngModel)]="statisticType">
+		<ion-segment-button value="Table">Table</ion-segment-button>
+		<ion-segment-button value="Poly">Poly</ion-segment-button>
+	</ion-segment>
+	<div [ngSwitch]="statisticType">
+		<ion-list class="table" no-lines *ngSwitchCase="'Table'">
+			<ion-item *ngFor="let statistic of data.statistics">
+				<ion-label dark item-left>{{statistic.date}}</ion-label>
+				<ion-input text-right type="number" [(ngModel)]="statistic.amount"></ion-input>
+			</ion-item>
+		</ion-list>
+		<div *ngSwitchCase="'Poly'">
+			<statistic-canvas [data]="data"></statistic-canvas>
+		</div>
+	</div>
+	<ion-row center class="switch-bar">
+		<ion-col width-25>
+			<button clear small dark (click)="switchCard(-1)">
+				<ion-icon name="arrow-back"></ion-icon>
+			</button>
+		</ion-col>
+		<ion-col width-50 text-center>
+			<h2 class="title">{{data.name}}</h2>
+		</ion-col>
+		<ion-col width-25>
+			<button clear small dark (click)="switchCard(1)" style="float:right;">
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>
+		</ion-col>
+	</ion-row>
+</ion-card>

@@ -41,15 +41,21 @@ export class CtrlCenterComponent {
 	// 用来切换 1 按钮
 	@Input() detailCardIcon: string;
 
+	@Input() addCardIcon: string;
+
+	private isDetailCardChanging = false;
+	private isAddCardChanging = false;
+
+
 	/**
 	 * 点击 1,4 按钮触发的动作，通过判断参数来确定传给父组件的信息
 	 * @param {string} message [description]
 	 */
 	showCard(message: string): void {
 		console.log('Run showCard!');
-		if (message === 'detail') {
+		if (message.indexOf('detail') !== -1) {
 			this.showDetail.emit(message);
-		} else {
+		} else if (message.indexOf('add') !== -1){
 			this.showAdder.emit(message);
 		}
 	}
@@ -83,5 +89,9 @@ export class CtrlCenterComponent {
 		console.log('Run stop!');
 		this.stateService.switchState('stop', this.id);
 		this.buttonIcon = 'play'; // 恢复图标
+	}
+
+	closeButNotSave() {
+
 	}
 }

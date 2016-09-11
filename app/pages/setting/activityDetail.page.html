@@ -1,0 +1,36 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<button  clear small dark (click)="close()">
+			<ion-icon name="arrow-back" ></ion-icon>
+		</button>
+		<ion-title>{{data.name}}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="activities">
+	<ion-list>
+		<ion-item>
+			<ion-label dark>name</ion-label>
+			<ion-input text-right type="text" [(ngModel)]="data.name"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label dark>target</ion-label>
+			<ion-input text-right type="text" [(ngModel)]="data.target"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label dark>work</ion-label>
+			<ion-input text-right type="text" [(ngModel)]="data.work"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label dark>break</ion-label>
+			<ion-input text-right type="text" [(ngModel)]="data.break"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label dark>theme</ion-label>
+			<ion-input text-right type="text" [(ngModel)]="data.theme"></ion-input>
+		</ion-item>
+		<button ion-item (click)="enterStatisticsPage(data.statistics)">
+			statistics
+		</button>
+	</ion-list>
+</ion-content>

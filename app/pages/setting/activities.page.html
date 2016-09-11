@@ -1,0 +1,19 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<button  clear small dark (click)="close()">
+			<ion-icon name="arrow-back" ></ion-icon>
+		</button>
+		<ion-title>Activities</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="activities">
+	<ion-list>
+		<button ion-item *ngFor="let activity of activities" (click)="enterActivityPage(activity)">
+			{{activity.name}}
+		</button>
+	</ion-list>
+	<div padding>
+		<button block dark small (click)="showAddCard()">添加</button>
+	</div>
+</ion-content>

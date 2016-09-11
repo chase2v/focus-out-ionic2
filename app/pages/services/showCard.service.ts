@@ -12,7 +12,7 @@ export class ShowCardService {
 
 	showCardObservable = this.showCardStream.asObservable();
 
-	showCard(): void {
-		this.showCardStream.next("Show card!");
+	showCard(message: string): void {
+		this.showCardStream.next(message);
 	}
 }

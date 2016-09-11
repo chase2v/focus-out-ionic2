@@ -11,12 +11,12 @@
 			<ion-item>
 				<ion-icon name="cloud" item-left></ion-icon>
 				<ion-label>同步</ion-label>
-				<ion-toggle favorite></ion-toggle>
+				<ion-toggle favorite [(ngModel)]="isSync" (change)="handleToggleChange()"></ion-toggle>
 			</ion-item>
 		</ion-item-group>
 		<ion-item-group>
 			<ion-item-divider></ion-item-divider>
-				<button ion-item>
+				<button ion-item (click)="onClickActivities()">
 					<ion-icon item-left name="timer"></ion-icon>
 					Activities
 				</button>

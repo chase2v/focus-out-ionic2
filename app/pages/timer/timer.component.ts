@@ -2,20 +2,33 @@ import {
 	Component,
 	Output,
 	ViewChild,
-	EventEmitter
+	EventEmitter,
+	OnInit
 } from '@angular/core';
+
+// 引入服务
 import {
 	StateService
 } from '../baseUI/state.service';
+import {
+	StoreService
+} from '../services/store.service';
+import {
+	TimerSwitcherService
+} from '../services/timerSwitcher.service';
 
 @Component({
 	selector: 'timer-component',
 	templateUrl: 'build/pages/timer/timer.component.html'
 })
-export class TimerComponent {
-	constructor(private stateService: StateService) {
-		console.log('Run constructor!');
+export class TimerComponent implements OnInit{
+	constructor(private stateService: StateService,private store: StoreService,private timerSwitcher: TimerSwitcherService) {
+	}
 
+	ngOnInit() {
+		this.getCurrentTimerArg();
+		// 观察计时器状态的变化
+		// 接受来自控制中心下达的命令！
 		this.stateService.stateSwitched.subscribe(message => {
 			let msg = message.split(',');
 			if (msg[1] !== '0') {
@@ -28,25 +41,30 @@ export class TimerComponent {
 				}
 			}
 		});
+
+		// 切换计时器时，接受来自切换服务的命令
+		this.timerSwitcher.timerSwichterObservable.subscribe(res => {
+			this.getCurrentTimerArg();
+		});
 	}
 
-	// 组件id
-	private id = 0;
-
-	// 用来获取 canvas 的 dom 节点
 	@ViewChild('canvas') canvas;
-
 	@ViewChild('playbutton') playButton; // 获取按钮
-
 	@ViewChild('text') text;
 
-	// 播放的一些状态
-	private playType = 'work';
-	private playButtonIcon = 'play';
+	private id = 0;	// 组件id
+	private playType = 'work'; // 当前计时类别
+	private playButtonIcon = 'play'; // 按钮组件的图标
 
-
-	// timer 的设定
-	private timeSet = {
+	// 计时器的参数
+	private timerArg = {
+		unit: 20,
+		workUnit: 'minutes', // or 'seconds'
+		breakUnit: 'minutes', // or 'seconds'
+		work: 2, // * 20 * 50 * 60
+		break: 1
+	}
+	private initTimerArg = {
 		unit: 20,
 		workUnit: 'minutes', // or 'seconds'
 		breakUnit: 'minutes', // or 'seconds'
@@ -54,19 +72,11 @@ export class TimerComponent {
 		break: 1
 	}
 
-	private initTimeSet = {
-		unit: 20,
-		workUnit: 'minutes', // or 'seconds'
-		breakUnit: 'minutes', // or 'seconds'
-		work: 2, // * 20 * 50 * 60
-		break: 1
-	}
-
-	// 全局管理定时器
+	// 用来全局管理定时器的一些参数
 	private interval = 0; // 定时器id
-	private i = 0; // 计数器
-	private currentPos = 1.5 * Math.PI; // timer 指针现在所处的位置
-	private time = this.timeSet.work * 50 * 60;
+	private i = 0; // 当前定时器重复运行的次数
+	private currentPos = 1.5 * Math.PI; // 计时器的指针当前所处的位置
+	private repeatTimes = this.timerArg.work * (1000 / this.timerArg.unit) * 60; // 定时器需要重复的次数
 
 	// 一些共用的绘制参数
 	private drawArgs = {
@@ -87,6 +97,15 @@ export class TimerComponent {
 			this.pause();
 			this.stateService.switchState('pause', this.id);
 		}
+	}
+
+	getCurrentTimerArg(): void {
+		this.store.getData(0, ["work","break"]).then(res => {
+			this.timerArg.work = res.work;
+			this.timerArg.break = res.break;
+			this.initTimerArg.work = res.work;
+			this.initTimerArg.break = res.break;
+		});
 	}
 
 	/**
@@ -229,15 +248,16 @@ export class TimerComponent {
 	}
 
 	/**
-	 * play 函数
+	 * 开始计时
 	 */
 	play(lastState?: string): void {
-		console.log('Run play!');
 
-		// 按钮状态切换
+		console.log('开始计时！');
+
+		// 按钮切换成暂停样式
 		this.playButtonIcon = 'pause';
 
-		// 获取参数
+		// 获取半径，圆心参数
 		let r = this.drawArgs.r,
 			center = this.drawArgs.center;
 
@@ -246,63 +266,64 @@ export class TimerComponent {
 		ctx.lineWidth = 3;
 		ctx.strokeStyle = '#000';
 
-		// 声明一些绘制需要的参数
-		let time = this.time;
 
-		// 开始绘制
-		let inter = 2 / time * Math.PI,
-			nextPos = this.currentPos - inter;
+		let arcUnit = 2 / this.repeatTimes * Math.PI, // 每次计时器转动的弧度
+			nextPos = this.currentPos - arcUnit;
+
 		this.interval = setInterval(() => {
 
-			// 随着时间变化，动态改变时间
-			let t_ = (time - this.i) % 50,
-				t = (time - this.i) / 50;
+			// 随着时间变化，动态改变时间（每一分钟检测一次）
+			// 需要在计时时间只剩下120秒时，显示的时间单位由minutes改成seconds
+			let t_ = (this.repeatTimes - this.i) % 50,
+				t = (this.repeatTimes - this.i) / 50;
 			if(t_ === 0 && t <= 120) { // 定时器每运行50次，是一秒
 				console.log(t);
 				if(this.playType === 'work') {
-					this.timeSet.work = t;
-					this.timeSet.workUnit = 'seconds';
+					this.timerArg.work = t;
+					this.timerArg.workUnit = 'seconds';
 				} else {
-					this.timeSet.break = t;
-					this.timeSet.breakUnit = 'seconds';
+					this.timerArg.break = t;
+					this.timerArg.breakUnit = 'seconds';
 				}
 			}
 
-			if (this.currentPos < inter) {
-				nextPos = 2 * Math.PI - (inter - this.currentPos);
+			// 因为计时器是从 1.5*Math.PI → 0，是递减进行绘制，所以转动到 0 这个位置时（也是 2*Math.PI），所以想继续转动，需要将 0 转换成 2*Math.PI
+			if (this.currentPos < arcUnit) {
+				nextPos = 2 * Math.PI - (arcUnit - this.currentPos);
 			} else {
-				nextPos = this.currentPos - inter;
+				nextPos = this.currentPos - arcUnit;
 			}
 
+			// 开始计时，转动，绘制
 			ctx.fillStyle = '#EDE9CA';
 			ctx.moveTo(center[0], center[1]);
 			ctx.arc(center[0], center[1], r[1], this.currentPos, nextPos, true);
 			ctx.closePath();
 			ctx.fill();
-
 			// 绘制小圆，背景为白色
 			ctx.fillStyle = '#fff';
 			ctx.beginPath();
 			ctx.arc(center[0], center[1], r[0], 0, 2 * Math.PI);
 			ctx.fill();
-
 			ctx.stroke();
-			this.currentPos = nextPos;
-			this.i++;
+			
+			// 定时器每次结束需要做的事
+			this.currentPos = nextPos; // 将计时器指针移至当前位置
+			this.i++; // 计时计数
 
-			// 结束时需要做的事情
-			if (this.i === time) {
+			// 计时结束时需要做的事情
+			if (this.i === this.repeatTimes) {
 				clearInterval(this.interval); // 清除定时器
 				this.stateService.switchState('stop', this.id); // 切换状态
 				this.playButtonIcon = 'play'; // 切换按钮状态
 				this.i = 0; // 计数清零
-				this.currentPos = 1.5 * Math.PI; // 恢复初始位置
-				this.timeSet = Object.assign({}, this.initTimeSet); // 恢复timeSet数据
+				this.currentPos = 1.5 * Math.PI; // 将计时器指针恢复初始位置
+				this.timerArg = Object.assign({}, this.initTimerArg); // 恢复timeSet数据
 
 				// 重新绘制图形，恢复的初始状态
 				if (this.playType === 'work') {
 					this.playType = 'break';
-					this.time = this.timeSet.break;
+					this.repeatTimes = this.timerArg.break;
 
 					ctx.fillStyle = '#0f0';
 					ctx.moveTo(center[0], center[1]);
@@ -319,7 +340,7 @@ export class TimerComponent {
 					ctx.stroke();
 				} else {
 					this.playType = 'work';
-					this.time = this.timeSet.work;
+					this.repeatTimes = this.timerArg.work;
 
 					ctx.fillStyle = '#ff0';
 					ctx.moveTo(center[0], center[1]);
@@ -338,7 +359,7 @@ export class TimerComponent {
 
 				console.log('Play over!');
 			}
-		}, this.timeSet.unit);
+		}, this.timerArg.unit);
 	}
 
 	/**

@@ -29,21 +29,20 @@ export class InfoCardComponent implements OnInit {
 		this.timerSwitcher.timerSwichterObservable.subscribe(res => {
 			this.switchTimer(res);
 		});
-	}
 
-	ngOnInit() {
-		console.log('Run ngOnInit!(InfoCardComponent)')
-		this.store.getData(1).then(res => {
+		this.store.getData(0,['name','target']).then(res => {
 			this.info.name = res.name;
 			this.info.target = Array(res.target);
 		});
 	}
 
+	ngOnInit() {}
+
 	// 卡片信息
 	private info = {
 		name: '',
 		target: []
-	}
+	};
 
 	// 调整卡片尺寸，来适应不同尺寸的设备
 	resize(contentHeight: number): void {
@@ -64,6 +63,6 @@ export class InfoCardComponent implements OnInit {
 
 	// 点击展示详细信息卡片
 	showDetailCard(): void {
-		this.showCardService.showCard();
+		this.showCardService.showCard('detail');
 	}
 }

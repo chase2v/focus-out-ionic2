@@ -30,6 +30,10 @@
 	}
 }
 
+.add-timer-card {
+	@extend .timer-detail-card;
+}
+
 // 去除input focus时的下底边
 @mixin rmbdColor {
 	border-bottom-width: 0 !important;

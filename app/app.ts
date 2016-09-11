@@ -18,10 +18,20 @@ import {
 import {
   StoreService
 } from './pages/services/store.service';
+import {
+  StateService
+} from './pages/baseUI/state.service';
+import {
+  TimerSwitcherService
+} from './pages/services/timerSwitcher.service';
+import {
+  ShowCardService
+} from './pages/services/showCard.service';
+
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [StoreService]
+  providers: [StoreService,StateService, TimerSwitcherService, ShowCardService]
 })
 export class MyApp {
 
@@ -29,7 +39,7 @@ export class MyApp {
 
   constructor(private platform: Platform, private store: StoreService) {
     this.rootPage = BasePage;
-
+    
     this.store.init();
 
     platform.ready().then(() => {

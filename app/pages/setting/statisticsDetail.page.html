@@ -1,0 +1,17 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<button  clear small dark (click)="close()">
+			<ion-icon name="arrow-back" ></ion-icon>
+		</button>
+		<ion-title>statistics</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="activities">
+	<ion-list>
+		<ion-item *ngFor="let data of statistics">
+			<ion-label dark>{{data.date}}</ion-label>
+			<ion-input text-right [(ngModel)]="data.amount"></ion-input>
+		</ion-item>
+	</ion-list>
+</ion-content>

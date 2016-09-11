@@ -7,22 +7,17 @@ import {
 	Subject
 } from 'rxjs/Subject';
 
-// 导入服务
-import {
-	StoreService
-} from './store.service';
-
 @Injectable()
 export class TimerSwitcherService {
 
-	constructor(private store: StoreService) {}
+	constructor() {}
 
 	private timerSwitcher = new Subject < number > ();
 
 	timerSwichterObservable = this.timerSwitcher.asObservable();
 
 	private currentTimer = 1;
-	private timersAmount: number;
+	timersAmount: number;
 
 	getCurrentTimer(): number {
 		return this.currentTimer;
@@ -30,7 +25,7 @@ export class TimerSwitcherService {
 
 	switchTimer(change: number): void {
 		console.log('Run switchTimer(TimerSwitcherService)');
-		this.timersAmount = this.store.length;
+		// this.timersAmount = this.store.length;
 		if (this.timersAmount === -1) {
 			console.log('还没完成初始化！');
 		}

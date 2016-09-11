@@ -1,1 +1,24 @@
-<ion-card class="add-timer-card"></ion-card>
+<div class="add-timer-card">
+	<ion-list no-lines>
+		<ion-item>
+			<ion-label light>name</ion-label>
+			<ion-input text-right [(ngModel)]="newTimerInfo.name" (keyup)="addTimerCardIsChanging()"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light>target</ion-label>
+			<ion-input text-right [(ngModel)]="newTimerInfo.target" (keyup)="addTimerCardIsChanging()"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light>work(minutes)</ion-label>
+			<ion-input text-right [(ngModel)]="newTimerInfo.work" (keyup)="addTimerCardIsChanging()"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light>break(minutes)</ion-label>
+			<ion-input text-right [(ngModel)]="newTimerInfo.break" (keyup)="addTimerCardIsChanging()"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label light>theme</ion-label>
+			<ion-input text-right [(ngModel)]="newTimerInfo.theme" (keyup)="addTimerCardIsChanging()"></ion-input>
+		</ion-item>
+	</ion-list>
+</div>

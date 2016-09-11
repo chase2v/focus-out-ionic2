@@ -1,6 +1,8 @@
 import {
 	Component,
-	OnInit
+	OnInit,
+	Output,
+	EventEmitter
 } from '@angular/core';
 
 // 导入服务
@@ -26,7 +28,6 @@ export class DetailCardComponent implements OnInit {
 
 	private timerInfo = {
 		id: 0,
-		timeSet: {}
 	};
 
 	ngOnInit() {
@@ -47,26 +48,49 @@ export class DetailCardComponent implements OnInit {
 	/**
 	 * 修改计时器信息
 	 */
+	@Output() onDetailCardChanging = new EventEmitter < string > ();
 	private sendSignal = false;
 	private isChanging = false;
 	setChangeAction(): any {
-		if(!this.isChanging) {
+		if (!this.isChanging) {
 			this.sendSignal = false;
 			this.isChanging = true;
-			new Promise((resolve,reject) => {
-				setInterval(()=>{
-					if(this.sendSignal) {
+			this.onDetailCardChanging.emit("changing");
+			new Promise((resolve, reject) => {
+				let i = 0;
+				let interval = setInterval(() => {
+					if (this.sendSignal) {
 						resolve();
+						clearInterval(interval);
 						this.sendSignal = false;
 						this.isChanging = false;
 					}
-				},2000);
+					i++;
+					console.log(i);
+					if(i===60) {
+						clearInterval(interval);
+						reject('被拒绝了');	
+					}
+				}, 2000);
 			}).then(res => {
 				this.store.setData(this.timerInfo.id, this.timerInfo);
-			});
+			}).catch(err=>console.log(err));
 		}
 	}
 	sendChange(): void {
 		this.sendSignal = true;
+	}
+
+	/**
+	 * 处理滑动时间
+	 * @param {[type]} e 事件对象
+	 */
+	handleSwipe(e) {
+		console.log(e.direction);
+		if (e.direction === 2) {
+			this.timerSwitcher.switchTimer(1);
+		} else if (e.direction === 4) {
+			this.timerSwitcher.switchTimer(-1);
+		}
 	}
 }

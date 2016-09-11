@@ -1,16 +1,16 @@
 <ion-card class="timer-detail-card">
-	<ion-list no-lines>
+	<ion-list no-lines (swipe)="handleSwipe($event)">
 		<ion-item>
 			<ion-label light fixed>name</ion-label> 
 			<ion-input text-right [(ngModel)]="timerInfo.name" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>work</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.timeSet.work" (keyup)="setChangeAction()"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.work" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>break</ion-label> 
-			<ion-input text-right [(ngModel)]="timerInfo.timeSet.break" (keyup)="setChangeAction()"></ion-input>
+			<ion-input text-right [(ngModel)]="timerInfo.break" (keyup)="setChangeAction()"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label light fixed>target</ion-label> 
