@@ -2,14 +2,15 @@ import {
 	Component,
 	OnInit,
 	ViewChild,
-	Input
+	Input,
+	OnChanges
 } from '@angular/core';
 
 @Component({
 	selector: 'statistic-canvas',
 	templateUrl: 'build/pages/statistics/statisticCard.canvas.component.html'
 })
-export class StatisticCardCanvasComponent implements OnInit {
+export class StatisticCardCanvasComponent implements OnInit,OnChanges {
 	constructor() {}
 
 	@Input() data;
@@ -19,18 +20,19 @@ export class StatisticCardCanvasComponent implements OnInit {
 		this.draw();
 	}
 
-
+	ngOnChanges() {
+		
+	}
 
 	draw(): void {
-		// 取得数据
-		let data = this.data.statistics;
 
+		this.data.reverse();
 
 		// 取得或设置绘画数据
 		let hNum = 32; // 横线数量
 		// 获得竖线数量
 		let arr = [];
-		data.forEach(v => {
+		this.data.forEach(v => {
 			arr.push(v.amount);
 			arr.push(v.target);
 		});
@@ -67,15 +69,15 @@ export class StatisticCardCanvasComponent implements OnInit {
 
 			// 绘制文字
 			if (i === 1 || (i - 1) % 5 === 0) {
-				if (data[i - 1]) {
+				if (this.data[i - 1]) {
 					ctx.font = "42px Arial";
-					let text = data[i - 1].date.match(/^\d{1,2}\/\d{1,2}/)[0],
+					let text = this.data[i - 1].date.toLocaleDateString().match(/\d{1,2}\/\d{1,2}$/)[0],
 						textW = ctx.measureText(text).width;
 					ctx.fillText(text, -75 - textW / 2, i * bgUnitH + 21);
 				}
-			} else if (i === data.length) {
+			} else if (i === this.data.length) {
 				ctx.font = "42px Arial";
-				let text = data[i - 1].date.match(/^\d{1,2}\/\d{1,2}/)[0],
+				let text = this.data[i - 1].date.toLocaleDateString().match(/\d{1,2}\/\d{1,2}$/)[0],
 					textW = ctx.measureText(text).width;
 				ctx.fillText(text, -75 - textW / 2, i * bgUnitH + 21);
 			}
@@ -110,12 +112,12 @@ export class StatisticCardCanvasComponent implements OnInit {
 		// 绘制目标线
 		ctx.strokeStyle = '#f00';
 		ctx.fillStyle = '#f00';
-		let drawTimes = 29 > (data.length - 1) ? (data.length - 1) : 29; // 设置绘制次数
+		let drawTimes = 29 > (this.data.length - 1) ? (this.data.length - 1) : 29; // 设置绘制次数
 
 		for (var i = 0; i < drawTimes; i++) {
 			ctx.beginPath();
-			ctx.moveTo(data[i].target * bgUnitW, bgUnitH * (i + 1));
-			ctx.lineTo(data[i + 1].target * bgUnitW, bgUnitH * (i + 2));
+			ctx.moveTo(this.data[i].target * bgUnitW, bgUnitH * (i + 1));
+			ctx.lineTo(this.data[i + 1].target * bgUnitW, bgUnitH * (i + 2));
 			ctx.stroke();
 		}
 
@@ -124,15 +126,15 @@ export class StatisticCardCanvasComponent implements OnInit {
 		ctx.strokeStyle = '#ff0';
 		ctx.fillStyle = '#ff0';
 
-		ctx.moveTo(data[0].amount * bgUnitW, bgUnitH);
-		ctx.arc(data[0].amount * bgUnitW, bgUnitH, 10, 0, 2 * Math.PI);
+		ctx.moveTo(this.data[0].amount * bgUnitW, bgUnitH);
+		ctx.arc(this.data[0].amount * bgUnitW, bgUnitH, 10, 0, 2 * Math.PI);
 		ctx.fill();
 		for (var i = 0; i < drawTimes; i++) {
 			ctx.beginPath();
-			ctx.moveTo(data[i].amount * bgUnitW, bgUnitH * (i + 1));
-			ctx.lineTo(data[i + 1].amount * bgUnitW, bgUnitH * (i + 2));
+			ctx.moveTo(this.data[i].amount * bgUnitW, bgUnitH * (i + 1));
+			ctx.lineTo(this.data[i + 1].amount * bgUnitW, bgUnitH * (i + 2));
 			ctx.stroke();
-			ctx.arc(data[i + 1].amount * bgUnitW, bgUnitH * (i + 2), 10, 0, 2 * Math.PI);
+			ctx.arc(this.data[i + 1].amount * bgUnitW, bgUnitH * (i + 2), 10, 0, 2 * Math.PI);
 			ctx.fill();
 		}
 
@@ -160,5 +162,7 @@ export class StatisticCardCanvasComponent implements OnInit {
 		ctx.fillText('*只展示30日内的数据', bgW-textW3, 31*bgUnitH+135);
 
 		// ************ 绘制结束 *************
+		
+		this.data.reverse();
 	}
 }

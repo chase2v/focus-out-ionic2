@@ -14,6 +14,9 @@ import {
 	StoreService
 } from '../services/store.service';
 import {
+	RecorderService
+} from '../services/recorder.service';
+import {
 	TimerSwitcherService
 } from '../services/timerSwitcher.service';
 
@@ -21,9 +24,8 @@ import {
 	selector: 'timer-component',
 	templateUrl: 'build/pages/timer/timer.component.html'
 })
-export class TimerComponent implements OnInit{
-	constructor(private stateService: StateService,private store: StoreService,private timerSwitcher: TimerSwitcherService) {
-	}
+export class TimerComponent implements OnInit {
+	constructor(private stateService: StateService, private store: StoreService, private timerSwitcher: TimerSwitcherService, private recorder: RecorderService) {}
 
 	ngOnInit() {
 		this.getCurrentTimerArg();
@@ -52,7 +54,7 @@ export class TimerComponent implements OnInit{
 	@ViewChild('playbutton') playButton; // 获取按钮
 	@ViewChild('text') text;
 
-	private id = 0;	// 组件id
+	private id = 0; // 组件id
 	private playType = 'work'; // 当前计时类别
 	private playButtonIcon = 'play'; // 按钮组件的图标
 
@@ -76,7 +78,6 @@ export class TimerComponent implements OnInit{
 	private interval = 0; // 定时器id
 	private i = 0; // 当前定时器重复运行的次数
 	private currentPos = 1.5 * Math.PI; // 计时器的指针当前所处的位置
-	private repeatTimes = this.timerArg.work * (1000 / this.timerArg.unit) * 60; // 定时器需要重复的次数
 
 	// 一些共用的绘制参数
 	private drawArgs = {
@@ -100,7 +101,7 @@ export class TimerComponent implements OnInit{
 	}
 
 	getCurrentTimerArg(): void {
-		this.store.getData(0, ["work","break"]).then(res => {
+		this.store.getData(0, ["work", "break"]).then(res => {
 			this.timerArg.work = res.work;
 			this.timerArg.break = res.break;
 			this.initTimerArg.work = res.work;
@@ -225,17 +226,17 @@ export class TimerComponent implements OnInit{
 		textLeft.style.width = (parseFloat(textStyle.width) / 2 - 50 / 3) + 'px';
 		textRight.style.width = (parseFloat(textStyle.width) / 2 - 50 / 3) + 'px';
 
-		time.forEach(x=>{
+		time.forEach(x => {
 			let height = window.getComputedStyle(x).height;
 			x.style.lineHeight = height;
 			x.style.fontSize = parseFloat(height) * .75 + 'px';
 		});
-		minutes.forEach(x=>{
+		minutes.forEach(x => {
 			let height = window.getComputedStyle(x).height;
 			x.style.lineHeight = window.getComputedStyle(x).height;
 			x.style.fontSize = parseFloat(height) * .75 + 'px';
 		});
-		type.forEach(x=>{
+		type.forEach(x => {
 			let height = window.getComputedStyle(x).height;
 			x.style.lineHeight = window.getComputedStyle(x).height;
 			x.style.fontSize = parseFloat(height) * .75 + 'px';
@@ -250,7 +251,7 @@ export class TimerComponent implements OnInit{
 	/**
 	 * 开始计时
 	 */
-	play(lastState?: string): void {
+	play(lastState ? : string): void {
 
 		console.log('开始计时！');
 
@@ -267,18 +268,19 @@ export class TimerComponent implements OnInit{
 		ctx.strokeStyle = '#000';
 
 
-		let arcUnit = 2 / this.repeatTimes * Math.PI, // 每次计时器转动的弧度
+		let repeatTimes = this.timerArg[this.playType] * (1000 / this.timerArg.unit) * 60, // 定时器需要重复的次数
+			arcUnit = 2 / repeatTimes * Math.PI, // 每次计时器转动的弧度
 			nextPos = this.currentPos - arcUnit;
 
 		this.interval = setInterval(() => {
 
 			// 随着时间变化，动态改变时间（每一分钟检测一次）
 			// 需要在计时时间只剩下120秒时，显示的时间单位由minutes改成seconds
-			let t_ = (this.repeatTimes - this.i) % 50,
-				t = (this.repeatTimes - this.i) / 50;
-			if(t_ === 0 && t <= 120) { // 定时器每运行50次，是一秒
+			let t_ = (repeatTimes - this.i) % (1000 / this.timerArg.unit),
+				t = (repeatTimes - this.i) / (1000 / this.timerArg.unit);
+			if (t_ === 0 && t <= 120) { // 定时器每运行50次，是一秒
 				console.log(t);
-				if(this.playType === 'work') {
+				if (this.playType === 'work') {
 					this.timerArg.work = t;
 					this.timerArg.workUnit = 'seconds';
 				} else {
@@ -306,13 +308,13 @@ export class TimerComponent implements OnInit{
 			ctx.arc(center[0], center[1], r[0], 0, 2 * Math.PI);
 			ctx.fill();
 			ctx.stroke();
-			
+
 			// 定时器每次结束需要做的事
 			this.currentPos = nextPos; // 将计时器指针移至当前位置
 			this.i++; // 计时计数
 
 			// 计时结束时需要做的事情
-			if (this.i === this.repeatTimes) {
+			if (this.i === repeatTimes) {
 				clearInterval(this.interval); // 清除定时器
 				this.stateService.switchState('stop', this.id); // 切换状态
 				this.playButtonIcon = 'play'; // 切换按钮状态
@@ -322,9 +324,11 @@ export class TimerComponent implements OnInit{
 
 				// 重新绘制图形，恢复的初始状态
 				if (this.playType === 'work') {
-					this.playType = 'break';
-					this.repeatTimes = this.timerArg.break;
+					this.recorder.record(); // 进行记录
 
+					this.playType = 'break'; // 切换计时类型
+
+					// 切换计时器颜色
 					ctx.fillStyle = '#0f0';
 					ctx.moveTo(center[0], center[1]);
 					ctx.arc(center[0], center[1], r[1], 0, 2 * Math.PI);
@@ -340,7 +344,6 @@ export class TimerComponent implements OnInit{
 					ctx.stroke();
 				} else {
 					this.playType = 'work';
-					this.repeatTimes = this.timerArg.work;
 
 					ctx.fillStyle = '#ff0';
 					ctx.moveTo(center[0], center[1]);

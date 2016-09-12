@@ -63,7 +63,7 @@ export class BasePage {
 	}
 
 	ionViewWillEnter() {
-		this.mytabs.select(2);
+		this.mytabs.select(1);
 	}
 
 	// 用来控制卡片的显示和隐藏

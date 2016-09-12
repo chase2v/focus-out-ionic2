@@ -27,11 +27,14 @@ import {
 import {
   ShowCardService
 } from './pages/services/showCard.service';
+import {
+  RecorderService
+} from './pages/services/recorder.service';
 
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [StoreService,StateService, TimerSwitcherService, ShowCardService]
+  providers: [StoreService,StateService, TimerSwitcherService, ShowCardService, RecorderService]
 })
 export class MyApp {
 
@@ -39,7 +42,7 @@ export class MyApp {
 
   constructor(private platform: Platform, private store: StoreService) {
     this.rootPage = BasePage;
-    
+
     this.store.init();
 
     platform.ready().then(() => {

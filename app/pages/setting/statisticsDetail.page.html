@@ -9,8 +9,8 @@
 
 <ion-content class="activities">
 	<ion-list>
-		<ion-item *ngFor="let data of statistics">
-			<ion-label dark>{{data.date}}</ion-label>
+		<ion-item *ngFor="let data of data.statistics">
+			<ion-label dark>{{data.date | date:'shortDate'}}</ion-label>
 			<ion-input text-right type="number" (blur)="changeData()" [(ngModel)]="data.amount"></ion-input>
 		</ion-item>
 	</ion-list>

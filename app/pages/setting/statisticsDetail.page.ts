@@ -10,12 +10,14 @@ import {
 })
 export class StatisticsDetailPage implements OnInit {
 	constructor(private navCtrl: NavController,private navParams: NavParams,private store: StoreService) {
-		this.statistics = this.navParams.get("data");
+		this.data = this.navParams.get("data");
 	}
 
 	ngOnInit() {}
 
-	private statistics = {};
+	private data = {
+		id: 0
+	};
 
 	// 修改数据
 	changeData() {
