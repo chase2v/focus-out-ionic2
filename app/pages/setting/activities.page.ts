@@ -34,7 +34,13 @@ export class ActivitiesPage implements OnInit {
 		this.navCtrl.push(ActivityDetailPage,{data: activity});
 	}
 
+	// 添加计时器
 	showAddCard() {
 		this.showCardService.showCard('adder');
+	}
+
+	// 删除计时器
+	deleteActivity(id: number) {
+		this.store.removeData(id);
 	}
 }

@@ -11,26 +11,29 @@
 	<ion-list>
 		<ion-item>
 			<ion-label dark>name</ion-label>
-			<ion-input text-right type="text" [(ngModel)]="data.name"></ion-input>
+			<ion-input text-right disabled type="text" [(ngModel)]="data.name"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label dark>target</ion-label>
-			<ion-input text-right type="text" [(ngModel)]="data.target"></ion-input>
+			<ion-input text-right disabled type="text" [(ngModel)]="data.target"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label dark>work</ion-label>
-			<ion-input text-right type="text" [(ngModel)]="data.work"></ion-input>
+			<ion-input text-right disabled type="text" [(ngModel)]="data.work"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label dark>break</ion-label>
-			<ion-input text-right type="text" [(ngModel)]="data.break"></ion-input>
+			<ion-input text-right disabled type="text" [(ngModel)]="data.break"></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label dark>theme</ion-label>
-			<ion-input text-right type="text" [(ngModel)]="data.theme"></ion-input>
+			<ion-input text-right disabled type="text" [(ngModel)]="data.theme"></ion-input>
 		</ion-item>
 		<button ion-item (click)="enterStatisticsPage(data.statistics)">
 			statistics
 		</button>
 	</ion-list>
+	<div padding>
+		<button block dark small (click)="showDetailCard()">修改</button>
+	</div>
 </ion-content>

@@ -103,6 +103,7 @@ export class BasePage {
 	isShowAddTimerCard(message ? : string): void {
 		console.log('Run isShowAddTimerCard!');
 		this.showAddTimerCard = !this.showAddTimerCard;
+		this.addCardIcon = this.showAddTimerCard ? 'close' : 'add';
 
 		if (!this.showAddTimerCard && message.indexOf('close') === -1) {
 			console.log('addSendChange');
@@ -110,7 +111,6 @@ export class BasePage {
 			this.ctrlCenter.isAddCardChanging = false;
 		} else if (!this.showAddTimerCard && message.indexOf('close') !== -1) {
 			this.ctrlCenter.isAddCardChanging = false;
-			this.addCardIcon = 'add';
 		}
 	}
 

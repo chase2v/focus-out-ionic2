@@ -7,8 +7,11 @@
 		<ion-list class="table" no-lines *ngSwitchCase="'Table'">
 			<ion-item *ngFor="let statistic of data.statistics">
 				<ion-label dark item-left>{{statistic.date}}</ion-label>
-				<ion-input text-right type="number" [(ngModel)]="statistic.amount"></ion-input>
+				<ion-input text-right type="number" (blur)="changeData()" [(ngModel)]="statistic.amount"></ion-input>
 			</ion-item>
+			<div padding>
+			<ion-note>☆仅显示30天内的统计信息，查看全部统计信息请前往设置中心。</ion-note>
+			</div>
 		</ion-list>
 		<div *ngSwitchCase="'Poly'">
 			<statistic-canvas [data]="data"></statistic-canvas>

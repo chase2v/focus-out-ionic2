@@ -9,11 +9,19 @@
 
 <ion-content class="activities">
 	<ion-list>
-		<button ion-item *ngFor="let activity of activities" (click)="enterActivityPage(activity)">
-			{{activity.name}}
-		</button>
+		<ion-item-sliding *ngFor="let activity of activities">
+			<button ion-item (click)="enterActivityPage(activity)">
+				{{activity.name}}
+			</button>
+			<ion-item-options side=right>
+				<button danger (click)="deleteActivity(activity.id)"><ion-icon name="trash"></ion-icon></button>
+			</ion-item-options>
+		</ion-item-sliding>
 	</ion-list>
 	<div padding>
 		<button block dark small (click)="showAddCard()">添加</button>
+	</div>
+	<div text-center>
+		<ion-note>向左滑动可删除项目...</ion-note>
 	</div>
 </ion-content>

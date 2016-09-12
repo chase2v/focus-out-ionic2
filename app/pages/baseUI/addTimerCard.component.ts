@@ -9,6 +9,10 @@ import {
 	StoreService
 } from '../services/store.service';
 
+import {
+	Timer
+} from '../services/timer.model'
+
 @Component({
 	selector: 'add-timer-card',
 	templateUrl: 'build/pages/baseUI/addTimerCard.component.html'
@@ -16,9 +20,16 @@ import {
 export class AddTimerCardComponent {
 	constructor(private store: StoreService) {}
 
-	private newTimerInfo = {
-
-	}
+	private newTimerInfo: Timer = {
+		name: '',
+		id: 0,
+		type: '',
+		target: 0,
+		work: 0,
+		break: 0,
+		theme: 'default',
+		statistics: []
+	};
 
 	/**
 	 * 修改计时器信息
@@ -48,7 +59,7 @@ export class AddTimerCardComponent {
 					}
 				}, 2000);
 			}).then(res => {
-				debugger
+				this.store.addData(this.newTimerInfo);
 			}).catch(err => console.log(err));
 		}
 	}

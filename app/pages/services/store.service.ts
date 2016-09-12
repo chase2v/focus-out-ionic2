@@ -10,6 +10,10 @@ import {
 	TimerSwitcherService
 } from './timerSwitcher.service';
 
+import {
+	Timer
+} from './timer.model';
+
 @Injectable()
 export class StoreService {
 
@@ -17,7 +21,7 @@ export class StoreService {
 	private storage: Storage;
 
 	// 初始数据
-	private initData = [{
+	private initData: Timer[] = [{
 		name: "study",
 		id: 1,
 		type: "default",
@@ -516,13 +520,9 @@ export class StoreService {
 	 * @param {number} id   数据（计时器）的id
 	 * @param {Object} data 要更改的数据
 	 */
-	setData(id: number, data: any): void {
+	setData(id: number, data: {}): void {
 		let initData = this.bufferData[id - 1],
-			timeSetChanged;
-		let changedData = Object.assign(initData, data);
-		if (data.hasOwnProperty("timeSet")) {
-			changedData.timeSet = Object.assign(initData.timeSet, data.timeSet);
-		}
+			changedData = Object.assign(initData, data);
 		this.bufferData[id - 1] = changedData;
 		this.refreshDataId();
 		this.storage.setJson("data", this.bufferData);
@@ -532,10 +532,13 @@ export class StoreService {
 	 * 增加一条数据（计时器）
 	 * @param {any} data 
 	 */
-	addData(data: any): void {
-		this.bufferData.push(data);
+	addData(timer: Timer): void {
+		this.bufferData.push(timer);
 		this.refreshDataId();
 		this.storage.setJson("data", this.bufferData);
+
+		// 更新计时器切换器中的数量
+		this.timerSwitcher.timersAmount += 1;
 	}
 
 	/**
@@ -547,6 +550,9 @@ export class StoreService {
 			this.bufferData.splice(id - 1, 1);
 			this.refreshDataId();
 			this.storage.setJson("data", this.bufferData);
+
+			// 更新计时器切换器中的数量
+			this.timerSwitcher.timersAmount -= 1;
 		} else {
 			return -1;
 		}

@@ -90,8 +90,4 @@ export class CtrlCenterComponent {
 		this.stateService.switchState('stop', this.id);
 		this.buttonIcon = 'play'; // 恢复图标
 	}
-
-	closeButNotSave() {
-
-	}
 }

@@ -13,6 +13,10 @@
 				<ion-label>同步</ion-label>
 				<ion-toggle favorite [(ngModel)]="isSync" (change)="handleToggleChange()"></ion-toggle>
 			</ion-item>
+			<button ion-item (click)="enterAccountPage()" *ngIf="isSync">
+				<ion-icon item-left name="person"></ion-icon>
+				账户
+			</button>
 		</ion-item-group>
 		<ion-item-group>
 			<ion-item-divider></ion-item-divider>

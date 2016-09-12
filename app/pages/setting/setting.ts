@@ -9,6 +9,9 @@ import {
 import {
 	ActivitiesPage
 } from './activities.page';
+import {
+	LoginModal
+} from '../statistics/login.modal';
 
 import {
 	StoreService
@@ -26,8 +29,14 @@ export class SettingPage {
 
 	private isSync: boolean;
 
-	handleToggleChange() {
-		debugger
+	enterAccountPage() {
+		if(localStorage.getItem("username")) {
+			// 查询到已经登录了账户，do something
+			debugger
+		} else {
+			let loginModal = this.modalCtrl.create(LoginModal);
+			loginModal.present();
+		}
 	}
 
 	onClickActivities() {
